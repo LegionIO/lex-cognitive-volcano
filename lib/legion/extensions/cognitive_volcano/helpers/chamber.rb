@@ -37,21 +37,21 @@ module Legion
             intensity       = avg_pressure.clamp(0.0, 1.0)
 
             critical.each { |m| m.release!(amount: m.pressure) }
-            @magma_deposits.reject! { |m| m.dormant? }
+            @magma_deposits.reject!(&:dormant?)
 
-            @temperature         = [@temperature - 0.2, 0.0].max
+            @temperature = [@temperature - 0.2, 0.0].max
             @structural_integrity = [@structural_integrity - 0.1, 0.0].max
             @eruption_count      += 1
 
             {
-              erupted:       true,
-              chamber_id:    @chamber_id,
-              eruption_type: eruption_type,
-              intensity:     intensity.round(10),
+              erupted:         true,
+              chamber_id:      @chamber_id,
+              eruption_type:   eruption_type,
+              intensity:       intensity.round(10),
               intensity_label: Constants.label_for(Constants::INTENSITY_LABELS, intensity),
-              magma_count:   critical.size,
-              domains:       critical.map(&:domain).uniq,
-              erupted_at:    Time.now.utc
+              magma_count:     critical.size,
+              domains:         critical.map(&:domain).uniq,
+              erupted_at:      Time.now.utc
             }
           end
 
@@ -79,6 +79,14 @@ module Legion
             @magma_deposits.sum(&:pressure) / @magma_deposits.size
           end
 
+          ERUPTION_TYPE_MAP = {
+            suppression: :breakthrough,
+            creativity:  :insight,
+            emotion:     :outburst,
+            memory:      :catharsis,
+            frustration: :outburst
+          }.freeze
+
           def to_h
             {
               chamber_id:           @chamber_id,
@@ -102,15 +110,7 @@ module Legion
             end
 
             dominant = type_counts.max_by { |_type, count| count }&.first
-
-            case dominant
-            when :suppression then :breakthrough
-            when :creativity  then :insight
-            when :emotion     then :outburst
-            when :memory      then :catharsis
-            when :frustration then :outburst
-            else                   :breakthrough
-            end
+            ERUPTION_TYPE_MAP.fetch(dominant, :breakthrough)
           end
         end
       end

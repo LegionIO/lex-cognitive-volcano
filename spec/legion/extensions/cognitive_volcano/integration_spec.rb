@@ -45,7 +45,7 @@ RSpec.describe 'CognitiveVolcano integration' do
 
       # Build pressure
       6.times { m.pressurize!(rate: constants::PRESSURE_RATE) }
-      expect([:building, :active, :elevated]).to include(m.pressure_label)
+      expect(%i[building active elevated]).to include(m.pressure_label)
 
       # Continue to critical
       20.times { m.pressurize!(rate: constants::PRESSURE_RATE) }

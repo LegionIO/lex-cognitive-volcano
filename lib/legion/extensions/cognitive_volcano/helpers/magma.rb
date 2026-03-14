@@ -7,7 +7,7 @@ module Legion
     module CognitiveVolcano
       module Helpers
         class Magma
-          attr_reader :magma_id, :magma_type, :domain, :content, :source, :created_at
+          attr_reader :magma_id, :magma_type, :domain, :content, :source, :created_at, :pressure
 
           def initialize(magma_type:, domain:, content:, source:, pressure: 0.0)
             unless Constants::MAGMA_TYPES.include?(magma_type)
@@ -22,10 +22,6 @@ module Legion
             @source     = source
             @pressure   = pressure.clamp(0.0, 1.0)
             @created_at = Time.now.utc
-          end
-
-          def pressure
-            @pressure
           end
 
           def pressurize!(rate: Constants::PRESSURE_RATE)

@@ -46,9 +46,7 @@ module Legion
 
           def pressurize(magma_id:, rate: Helpers::Constants::PRESSURE_RATE, engine: nil, **)
             magma = resolve_engine(engine).pressurize_magma(magma_id: magma_id, rate: rate)
-            unless magma
-              return { success: false, error: :magma_not_found, magma_id: magma_id }
-            end
+            return { success: false, error: :magma_not_found, magma_id: magma_id } unless magma
 
             Legion::Logging.debug "[cognitive_volcano] pressurized magma=#{magma_id[0..7]} " \
                                   "pressure=#{magma.pressure.round(2)} critical=#{magma.critical?}"

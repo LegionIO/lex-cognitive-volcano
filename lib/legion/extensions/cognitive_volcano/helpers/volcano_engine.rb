@@ -83,14 +83,14 @@ module Legion
             avg_pressure   = @magma_registry.empty? ? 0.0 : total_pressure / @magma_registry.size
 
             {
-              total_chambers:  @chambers.size,
-              total_magma:     @magma_registry.size,
-              critical_count:  critical_magma.size,
-              average_pressure: avg_pressure.round(10),
-              pressure_label:  Constants.label_for(Constants::PRESSURE_LABELS, avg_pressure),
+              total_chambers:    @chambers.size,
+              total_magma:       @magma_registry.size,
+              critical_count:    critical_magma.size,
+              average_pressure:  avg_pressure.round(10),
+              pressure_label:    Constants.label_for(Constants::PRESSURE_LABELS, avg_pressure),
               volatile_chambers: @chambers.values.count(&:volatile?),
-              eruption_count:  @eruption_history.size,
-              chambers:        chambers_data
+              eruption_count:    @eruption_history.size,
+              chambers:          chambers_data
             }
           end
 
